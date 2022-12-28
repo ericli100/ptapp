@@ -14,7 +14,7 @@ RUN npm run build
 FROM --platform=linux/amd64 nginx:1.23.3-alpine
 COPY ./.github/deployment/nginx-nocache.conf /etc/nginx/conf.d/nginx-nocache.conf
 COPY ./.github/deployment/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY ./.github/deployment/bootstrap.sh /bootstrap.sh
 EXPOSE 80
 CMD ["/bin/ash", "/bootstrap.sh"]
