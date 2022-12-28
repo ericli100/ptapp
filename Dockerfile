@@ -1,5 +1,5 @@
 # build environment
-FROM --platform=linux/amd64 node:18.21.1-alpine as build
+FROM --platform=linux/amd64 node:18.12.1-alpine as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
