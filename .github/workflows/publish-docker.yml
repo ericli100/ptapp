@@ -1,0 +1,26 @@
+name: Publish Docker
+on:
+  release:
+    types: [published]
+jobs:
+  push_to_registry:
+    name: Build and Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      # - name: Copy .npmrc
+      #   run: cp -f .github/deployment/.npmrc .npmrc
+
+      # - name: Set VAR_NPM_PASSWORD
+      #   run: sed -i "s/VAR_NPM_PASSWORD/${{ secrets.GITHUB_TOKEN }}/" .npmrc
+
+      - name: Build and Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          repository: providertrust/${{ github.event.repository.name }}
+          tag_with_ref: true
