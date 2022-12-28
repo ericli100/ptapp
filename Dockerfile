@@ -7,7 +7,7 @@ COPY package.json /app/package.json
 
 RUN npm install
 COPY . /app
-# RUN CI=true npm run test
+# RUN npm run test
 RUN npm run build
 
 # production environment
