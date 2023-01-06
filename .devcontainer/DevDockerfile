@@ -1,0 +1,26 @@
+# pull official base image
+FROM node:18.12.1
+
+ARG UNAME=ptAppUser
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g $GID -o $UNAME \
+  &&  useradd -m -u $UID -g  $GID -o -s /bin/bash $UNAME \
+  && apt-get update \
+  && apt-get install -y sudo \
+  && echo $UNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$UNAME \
+  && echo node ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/node \
+  && chmod 0440 /etc/sudoers.d/$UNAME \
+  && chmod 0440 /etc/sudoers.d/node
+
+
+# Create the volume mount point and change its owership, so the user can have access.
+RUN mkdir -p /app \
+  && mkdir -p /app/node_modules \
+  && chown $UNAME:$UNAME /app/node_modules
+
+USER $UNAME
+
+# set working directory
+
+WORKDIR /app
