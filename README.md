@@ -15,4 +15,6 @@
 
 Once you are in the container, run `npm install`, then `npm dev`
 
+### Running Storybook
 
+Once you are in the container, run `./runsb.sh`
