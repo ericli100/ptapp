@@ -1,7 +1,10 @@
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 
-export default function HelloWorld({ variant = 'gray' }) {
+export type HelloWorldProps = {
+  variant: 'gray' | 'red' | 'green' | 'blue';
+};
+
+export default function HelloWorld({ variant }: HelloWorldProps) {
   const wrapperClassName = clsx(
     'border p-8 rounded-xl mb-8 bg-gray-100 border-gray-300',
     variant === 'red' && 'bg-red-100 border-red-300',
@@ -35,11 +38,3 @@ export default function HelloWorld({ variant = 'gray' }) {
     </div>
   );
 }
-
-HelloWorld.defaultProps = {
-  variant: 'gray',
-};
-
-HelloWorld.propTypes = {
-  variant: PropTypes.oneOf(['gray', 'red', 'green', 'blue']),
-};
