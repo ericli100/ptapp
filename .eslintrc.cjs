@@ -26,6 +26,10 @@ module.exports = {
     'import/extensions': 0,
   },
   rules: {
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*.test.ts', '**/*.spec.ts', '**/*.stories.tsx'] },
+    ],
     'import/extensions': [
       'error',
       'ignorePackages',

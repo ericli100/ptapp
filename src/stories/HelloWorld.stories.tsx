@@ -1,6 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import HelloWorld, { HelloWorldProps } from '../components/HelloWorld';
+import HelloWorld from '../components/HelloWorld';
 
 export default {
   title: 'HelloWorld',
@@ -15,15 +14,11 @@ export default {
 
 // Storybook story docs: https://storybook.js.org/docs/react/writing-stories/args
 
-// React version:
-// function Template(args: HelloWorldProps) {
-//   return <HelloWorld variant={args} />;
-// }
-
-// TS version:
-const Template: ComponentStory<typeof HelloWorld> = (args) => (
-  <HelloWorld {...args} />
-);
+// eslint-disable-next-line react/function-component-definition
+const Template: ComponentStory<typeof HelloWorld> = (args) => {
+  const { variant } = args;
+  return <HelloWorld variant={variant} />;
+};
 
 export const Message = Template.bind({});
 Message.args = { variant: 'gray' };
