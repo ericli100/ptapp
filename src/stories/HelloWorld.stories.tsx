@@ -12,8 +12,6 @@ export default {
   },
 } as ComponentMeta<typeof HelloWorld>;
 
-// Storybook story docs: https://storybook.js.org/docs/react/writing-stories/args
-
 // eslint-disable-next-line react/function-component-definition
 const Template: ComponentStory<typeof HelloWorld> = (args) => {
   const { variant } = args;
