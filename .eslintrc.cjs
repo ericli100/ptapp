@@ -26,10 +26,13 @@ module.exports = {
     'import/extensions': 0,
   },
   rules: {
+<<<<<<< Updated upstream
     'import/no-extraneous-dependencies': [
       'error',
       { devDependencies: ['**/*.test.ts', '**/*.spec.ts', '**/*.stories.tsx'] },
     ],
+=======
+>>>>>>> Stashed changes
     'import/extensions': [
       'error',
       'ignorePackages',

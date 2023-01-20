@@ -14,7 +14,7 @@ function App() {
             This starter includes linting, tailwind ui and prettier code
             formatting, as well as air bnb rules.
           </p>
-          <HelloWorld />
+          <HelloWorld variant="gray" />
         </div>
         <div className="mt-10 w-full max-w-xs">
           <label
