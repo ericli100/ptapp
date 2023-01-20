@@ -2,6 +2,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { UserContextProvider } from './components/Auth/UserContextProvider';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         connection: 'one-platform-ProviderTrust',
       }}
     >
-      <App />
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
     </Auth0Provider>
   </React.StrictMode>
 );
