@@ -1,0 +1,7 @@
+interface Window {
+  REACT_APP_API_URL: String;
+  REACT_APP_OAUTH_DOMAIN: String;
+  REACT_APP_OAUTH_CLIENTID: String;
+  REACT_APP_OAUTH_AUDIENCE: String;
+  REACT_APP_OAUTH_CONNECTION: String;
+}

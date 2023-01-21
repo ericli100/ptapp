@@ -10,6 +10,7 @@ function App() {
           <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
             Provider Trust App Starter with Tailwind UI Example
           </h2>
+          <h2>Environment Var = {window.REACT_APP_API_URL} PROD-117</h2>
           <p className="mt-5 text-xl text-gray-500">
             This starter includes linting, tailwind ui and prettier code
             formatting, as well as air bnb rules.
