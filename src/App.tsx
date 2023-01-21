@@ -1,7 +1,9 @@
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import HelloWorld from './components/HelloWorld';
+import Logger from './services/Logger';
 
 function App() {
+  Logger.log('Start of the app!');
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:flex lg:justify-between lg:px-8">
