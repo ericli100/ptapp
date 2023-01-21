@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { UserContext } from './UserContextProvider';
 
 function Profile() {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   const { nickName, user } = useContext(UserContext);
   if (isAuthenticated && user) {
     return (

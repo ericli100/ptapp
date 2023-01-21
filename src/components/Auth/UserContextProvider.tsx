@@ -1,22 +1,20 @@
-import { useAuth0, User } from '@auth0/auth0-react';
-import { createContext, useState } from 'react';
+import React, { createContext } from 'react';
+import type { UserInfo } from '../../models/userInfo';
+import useUserProfile from './useUserProfile';
 
-export const UserContext = createContext<{
-  nickName: string;
-  user: User | undefined;
-}>({
+export const UserContext = createContext<UserInfo>({
   nickName: '',
   user: undefined,
 });
 
-// TODO: EL - clean this up.
-export const UserContextProvider = ({ children }: { children: any }) => {
-  const [nickName, setNickName] = useState('Peter Pan');
-  const { user, isAuthenticated, isLoading } = useAuth0();
+type Props = {
+  children: React.ReactNode;
+};
 
-  const userInfo = { nickName, user };
+export function UserContextProvider({ children }: Props) {
+  const userInfo = useUserProfile();
 
   return (
     <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>
   );
-};
+}

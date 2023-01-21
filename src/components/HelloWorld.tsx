@@ -1,13 +1,10 @@
 import clsx from 'clsx';
-import { useContext } from 'react';
-import { UserContext } from './Auth/UserContextProvider';
 
 export type HelloWorldProps = {
   variant: 'gray' | 'red' | 'green' | 'blue';
 };
 
 export default function HelloWorld({ variant }: HelloWorldProps) {
-  const { nickName, user } = useContext(UserContext);
   const wrapperClassName = clsx(
     'border p-8 rounded-xl mb-8',
     variant === 'gray' && 'bg-gray-100 border-gray-300',
@@ -33,9 +30,7 @@ export default function HelloWorld({ variant }: HelloWorldProps) {
   return (
     <div className={wrapperClassName}>
       <h1 className={headlineClassName}>Super Secret Hello World</h1>
-      <h2 className={subHeadlineClassName}>
-        {user?.name}, a.k.a. {nickName}, How you doing?{' '}
-      </h2>
+      <h2 className={subHeadlineClassName}>How you doin?</h2>
       <p className={paragraphClassName}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla rhoncus
         eget justo vitae molestie. In et metus at est dictum posuere sit amet

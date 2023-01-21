@@ -25,14 +25,14 @@ function App() {
               <p className="mt-5 text-xl text-gray-500">
                 Log in to see the super secret component.
               </p>
-              <LoginButton></LoginButton>
+              <LoginButton />
             </>
           )}
           {!isLoading && isAuthenticated && (
             <>
-              <LogoutButton></LogoutButton>
+              <LogoutButton />
               <HelloWorld variant="gray" />
-              <Profile></Profile>
+              <Profile />
             </>
           )}
         </div>
