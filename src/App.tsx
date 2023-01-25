@@ -1,12 +1,16 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import LoginButton from './components/Auth/LoginButton';
+import LogoutButton from './components/Auth/LogoutButton';
+import Profile from './components/Auth/Profile';
 import HelloWorld from './components/HelloWorld';
 
 function App() {
+  const { isAuthenticated, isLoading } = useAuth0();
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:flex lg:justify-between lg:px-8">
+      <div className="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:flex  lg:justify-between lg:px-8">
         <div className="max-w-xl">
-          <HelloWorld variant="gray" />
           <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
             Provider Trust App Starter with Tailwind UI Example
           </h2>
@@ -15,6 +19,23 @@ function App() {
             This starter includes linting, tailwind ui and prettier code
             formatting, as well as air bnb rules.
           </p>
+
+          {isLoading && <div>Loading ...</div>}
+          {!isLoading && !isAuthenticated && (
+            <>
+              <p className="mt-5 text-xl text-gray-500">
+                Log in to see the super secret component.
+              </p>
+              <LoginButton />
+            </>
+          )}
+          {!isLoading && isAuthenticated && (
+            <>
+              <LogoutButton />
+              <HelloWorld variant="gray" />
+              <Profile />
+            </>
+          )}
         </div>
         <div className="mt-10 w-full max-w-xs">
           <label
