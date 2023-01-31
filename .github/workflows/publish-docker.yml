@@ -24,8 +24,9 @@ jobs:
           registry: ghcr.io
           repository: providertrust/${{ github.event.repository.name }}
           tag_with_ref: true
+
       - name: Deploy to One-Platform Environment
-          env:
-           GITHUB_TOKEN: ${{ secrets.PT_GITHUB_SERVICE_ACCOUNT_REPO_ACCESS }}
-          run: |
-            gh workflow run deploy-one-platform-dev.yml --field ptapp_release=${{ github.ref_name }} --field terraform_action=apply --repo providertrust/deploy-environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.PT_GITHUB_SERVICE_ACCOUNT_REPO_ACCESS }}
+        run: |
+          gh workflow run deploy-one-platform-dev.yml --field ptapp_release=${{ github.ref_name }} --field terraform_action=apply --repo providertrust/deploy-environment
