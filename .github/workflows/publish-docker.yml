@@ -24,6 +24,7 @@ jobs:
           registry: ghcr.io
           repository: providertrust/${{ github.event.repository.name }}
           tag_with_ref: true
+
       - name: Deploy to One-Platform Environment
           env:
            GITHUB_TOKEN: ${{ secrets.PT_GITHUB_SERVICE_ACCOUNT_REPO_ACCESS }}
