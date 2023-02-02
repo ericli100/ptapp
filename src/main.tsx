@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { UserContextProvider } from './components/Auth/UserContextProvider';
 import './index.css';
+import './fontawesome';
 
 const gtmStagingId = 'GTM-MKG6L3V';
 const tagManagerArgs = {

@@ -6,6 +6,9 @@ const colors = require('tailwindcss/colors');
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      sans: ['"Source Sans Pro", "sans-serif"'],
+    },
     extend: {
       colors: {
         cyan: colors.cyan,
