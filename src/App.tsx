@@ -4,8 +4,10 @@ import LoginButton from './components/Auth/LoginButton';
 import LogoutButton from './components/Auth/LogoutButton';
 import Profile from './components/Auth/Profile';
 import HelloWorld from './components/HelloWorld';
+import Logger from './services/Logger';
 
 function App() {
+  Logger.log('Start of the app!');
   const { isAuthenticated, isLoading } = useAuth0();
   return (
     <div className="bg-white">
