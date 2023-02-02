@@ -29,7 +29,7 @@ export default function HelloWorld({ variant }: HelloWorldProps) {
   const paragraphClassName = clsx('text-sm leading-6 text-gray-900');
   return (
     <div className={wrapperClassName}>
-      <h1 className={headlineClassName}>Hello World</h1>
+      <h1 className={headlineClassName}>Super Secret Hello World</h1>
       <h2 className={subHeadlineClassName}>How you doin?</h2>
       <p className={paragraphClassName}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla rhoncus
