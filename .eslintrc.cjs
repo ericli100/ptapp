@@ -34,6 +34,7 @@ module.exports = {
           '**/*.spec.ts',
           '**/*.stories.tsx',
           '**/*.config.ts',
+          '**/*.config.cjs',
         ],
       },
     ],

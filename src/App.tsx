@@ -1,45 +1,45 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import LoginButton from './components/Auth/LoginButton';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useEffect } from 'react';
 import LogoutButton from './components/Auth/LogoutButton';
-import Profile from './components/Auth/Profile';
-import HelloWorld from './components/HelloWorld';
-import PageContainer from './components/Page/PageContainer';
+import AlertsPage from './components/Pages/AlertsPage';
+import Sidebar from './components/Sidebar/Sidebar';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import ErrorPage from './components/Page/ErrorPage';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth0();
-  return (
-    <div>
-      <PageContainer />
-      <div className="mx-auto mt-96 max-w-6xl py-16 px-4 sm:py-24 sm:px-6 lg:flex lg:justify-between lg:px-8">
-        <div className="max-w-xl">
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-            Provider Trust App Starter with Tailwind UI Example
-          </h2>
-          <h2>Environment Var = {window.REACT_APP_API_URL} PROD-117</h2>
-          <p className="mt-5 text-xl text-gray-500">
-            This starter includes linting, tailwind ui and prettier code
-            formatting, as well as air bnb rules.
-          </p>
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
-          {isLoading && <div>Loading ...</div>}
-          {!isLoading && !isAuthenticated && (
-            <>
-              <p className="mt-5 text-xl text-gray-500">
-                Log in to see the super secret component.
-              </p>
-              <LoginButton />
-            </>
-          )}
-          {!isLoading && isAuthenticated && (
-            <>
-              <LogoutButton />
-              <HelloWorld variant="gray" />
-              <Profile />
-            </>
-          )}
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <AlertsPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/dashboard',
+      element: <AlertsPage />,
+    },
+  ]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      loginWithRedirect();
+    }
+  }, [isAuthenticated, isLoading, loginWithRedirect]);
+  return (
+    <main>
+      <div className="min-h-full">
+        <Sidebar />
+        <div id="content-container" className="flex flex-1 flex-col lg:pl-64">
+          <Header />
+          <RouterProvider router={router} />
+          <Footer />
+          <LogoutButton />
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

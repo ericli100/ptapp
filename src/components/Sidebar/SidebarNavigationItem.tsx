@@ -1,19 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+import { SidebarItem } from './sidebarItem';
 
-export type SidebarNavigationItemProps = {
-  label: string;
-  href: string;
-  icon: string;
-  current: boolean;
-};
-
-function SidebarNavigationItem({
-  label,
-  href,
-  icon,
-  current,
-}: SidebarNavigationItemProps) {
+function SidebarNavigationItem({ label, href, icon, current }: SidebarItem) {
   const itemClassName = clsx(
     'group flex items-center rounded-md px-2 py-2 text-sm font-medium leading-6 text-ptRoyal-100 hover:bg-white hover:bg-opacity-10 hover:text-white',
     current === true && 'is-active bg-white bg-opacity-10 text-white'

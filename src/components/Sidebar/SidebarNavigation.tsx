@@ -1,16 +1,17 @@
+import type { SidebarItem } from './sidebarItem';
 import SidebarNavigationItem from './SidebarNavigationItem';
 
-const primaryNavigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: 'house', current: false },
-  { name: 'Alerts', href: '/alerts', icon: 'bell', current: true },
+const primaryNavigation: SidebarItem[] = [
+  { label: 'Dashboard', href: '/dashboard', icon: 'house', current: false },
+  { label: 'Alerts', href: '/alerts', icon: 'bell', current: true },
   {
-    name: 'Population',
+    label: 'Population',
     href: '/population',
     icon: 'user-group',
     current: false,
   },
   {
-    name: 'Reports',
+    label: 'Reports',
     href: '/reports',
     icon: 'file-chart-column',
     current: false,
@@ -18,8 +19,8 @@ const primaryNavigation = [
 ];
 
 const secondaryNavigation = [
-  { name: 'Help', href: '/support', icon: 'question-circle', current: false },
-  { name: 'Privacy', href: '/privacy', icon: 'shield-check', current: false },
+  { label: 'Help', href: '/support', icon: 'question-circle', current: false },
+  { label: 'Privacy', href: '/privacy', icon: 'shield-check', current: false },
 ];
 
 function SidebarNavigation() {
@@ -29,10 +30,11 @@ function SidebarNavigation() {
         <div className="space-y-1 px-2">
           {primaryNavigation.map((item) => (
             <SidebarNavigationItem
-              label={item.name}
+              label={item.label}
               href={item.href}
               icon={item.icon}
               current={item.current}
+              key={item.href}
             />
           ))}
         </div>
@@ -40,10 +42,11 @@ function SidebarNavigation() {
           <div className="space-y-1 px-2">
             {secondaryNavigation.map((item) => (
               <SidebarNavigationItem
-                label={item.name}
+                label={item.label}
                 href={item.href}
                 icon={item.icon}
                 current={item.current}
+                key={item.href}
               />
             ))}
           </div>
