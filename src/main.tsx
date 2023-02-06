@@ -2,6 +2,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import TagManager from 'react-gtm-module';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App';
 import { UserContextProvider } from './components/Auth/UserContextProvider';
 import './index.css';
@@ -17,6 +18,7 @@ const tagManagerArgs = {
 
 TagManager.initialize(tagManagerArgs);
 
+// TODO: EL - use env for clientId.
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Auth0Provider
