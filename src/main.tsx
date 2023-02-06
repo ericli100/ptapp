@@ -18,6 +18,7 @@ const tagManagerArgs = {
 
 TagManager.initialize(tagManagerArgs);
 
+// TODO: EL - use env for clientId.
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Auth0Provider
