@@ -1,5 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import styled from 'styled-components';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import type { TableProps } from './tableProps';
 import {
@@ -8,31 +8,6 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
 } from './Icons';
-
-const Styles = styled.div`
-  display: block;
-  max-width: 100%;
-
-  .tableWrap {
-    display: block;
-    max-width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-  }
-
-  table {
-    border-spacing: 0;
-
-    th,
-    td {
-      margin: 0;
-      width: 1%;
-      &.collapse {
-        width: 0.0000000001%;
-      }
-    }
-  }
-`;
 
 function Table({ columns, data }: TableProps) {
   const {
@@ -60,55 +35,61 @@ function Table({ columns, data }: TableProps) {
     usePagination
   );
 
-  // Render the UI for your table
   return (
     <>
-      <table
-        {...getTableProps()}
-        className="min-w-full overflow-hidden rounded-lg bg-white text-sm text-gray-700 shadow"
-      >
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="bg-blue-100 py-6 px-6 text-left font-semibold"
-                >
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <ChevronDownIcon />
+      <div className="min-w-full overflow-hidden overflow-x-auto shadow sm:rounded-lg">
+        <table
+          {...getTableProps()}
+          className="min-w-full text-sm text-gray-700"
+        >
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="bg-blue-100 py-6 px-6 text-left font-semibold"
+                  >
+                    {column.render('Header')}
+
+                    {/* TODO: Extract this into a SortedIcon component */}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <ChevronDownIcon />
+                        ) : (
+                          <ChevronUpIcon />
+                        )
                       ) : (
-                        <ChevronUpIcon />
-                      )
-                    ) : (
-                      ''
-                    )}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()} className="border-t px-6 py-6">
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
+                        ''
+                      )}
+                    </span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        className="border-t px-6 py-6"
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <div className="lg:mx-auto lg:max-w-6xl">
         <div className="mt-6 flex items-center justify-between border-t border-gray-200">
           <button
@@ -594,11 +575,7 @@ function PaginatedTable() {
     []
   );
 
-  return (
-    <Styles>
-      <Table columns={columns} data={data} />
-    </Styles>
-  );
+  return <Table columns={columns} data={data} />;
 }
 
 export default PaginatedTable;

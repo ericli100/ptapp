@@ -4,7 +4,7 @@ import FilterableTableContainer from '../../components/FilterableTable/Filterabl
 export default function AlertsPage() {
   return (
     <section className="">
-      <div className="mx-auto max-w-6xl pt-7 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4  pt-7 lg:px-8">
         <IndexPageHeader />
         <FilterableTableContainer />
       </div>

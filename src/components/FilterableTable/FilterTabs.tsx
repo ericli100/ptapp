@@ -10,7 +10,7 @@ export default function FilterTabs() {
             name="tabs"
             className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-ptBlue-500 focus:outline-none focus:ring-ptBlue-500 sm:text-sm"
           >
-            <option>HEY</option>
+            <option>An option...</option>
           </select>
         </div>
         <div className="hidden sm:block">
@@ -20,7 +20,7 @@ export default function FilterTabs() {
                 href="/#"
                 className="flex whitespace-nowrap border-b-2 border-ptBlue-500 py-4 px-1 text-sm font-bold text-ptRoyal-600"
               >
-                All Alerts
+                An Item
                 <span className="ml-3 hidden rounded-full bg-ptRoyal-100 py-0.5 px-2.5 text-xs font-medium text-ptRoyal-500 md:inline-block">
                   77
                 </span>
@@ -29,7 +29,7 @@ export default function FilterTabs() {
                 href="/#"
                 className="flex whitespace-nowrap border-b-2 border-transparent py-4 px-1 text-sm font-medium text-navy-400 hover:border-ptBlue-200 hover:text-navy-700"
               >
-                New Alerts
+                Another Item
                 <span className="ml-3 hidden rounded-full bg-navy-50 py-0.5 px-2.5 text-xs font-medium text-navy-400 md:inline-block">
                   13
                 </span>
