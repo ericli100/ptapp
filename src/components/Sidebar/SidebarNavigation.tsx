@@ -18,7 +18,7 @@ const primaryNavigation: SidebarItem[] = [
   },
 ];
 
-const secondaryNavigation = [
+const secondaryNavigation: SidebarItem[] = [
   { label: 'Help', href: '/support', icon: 'question-circle', current: false },
   { label: 'Privacy', href: '/privacy', icon: 'shield-check', current: false },
 ];

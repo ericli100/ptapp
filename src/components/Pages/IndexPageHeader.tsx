@@ -1,6 +1,6 @@
-import PageHeaderBadge from './PageHeaderBadge';
+import PageHeaderBadge from './IndexPageHeaderBadge';
 
-export default function PageHeader() {
+export default function IndexPageHeader() {
   return (
     <div className="flex items-center">
       <div className="items-center">

@@ -7,9 +7,11 @@ import {
   faFileChartColumn,
   faQuestionCircle,
   faShieldCheck,
+  faArrowLeftLong,
+  faArrowRightLong,
 } from '@fortawesome/pro-light-svg-icons';
 
-import { faChevronDown } from '@fortawesome/pro-regular-svg-icons';
+import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
 
 library.add(
   faHouse,
@@ -18,5 +20,8 @@ library.add(
   faFileChartColumn,
   faQuestionCircle,
   faShieldCheck,
-  faChevronDown
+  faChevronDown,
+  faChevronUp,
+  faArrowLeftLong,
+  faArrowRightLong
 );

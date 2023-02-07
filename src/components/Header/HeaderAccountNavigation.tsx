@@ -1,12 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LogoutButton from '../Auth/LogoutButton';
 
 const userNavigation = [
   { name: 'My Profile', href: '#' },
   { name: 'Security', href: '#' },
   { name: 'Notifications', href: '#' },
-  { name: 'Logout', href: '#' },
 ];
 
 function classNames(...classes) {
@@ -61,6 +61,7 @@ export default function HeaderAccountNavigation() {
               )}
             </Menu.Item>
           ))}
+          <LogoutButton />
         </Menu.Items>
       </Transition>
     </Menu>

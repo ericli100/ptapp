@@ -6,15 +6,14 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { useEffect } from 'react';
-import LogoutButton from './components/Auth/LogoutButton';
-import AlertsPage from './components/Pages/AlertsPage';
+import AlertsPage from './pages/Alerts/AlertsPage';
 import Sidebar from './components/Sidebar/Sidebar';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import ErrorPage from './components/Page/ErrorPage';
-import DashboardPage from './components/Pages/DashboardPage';
-import PopulationPage from './components/Pages/PopulationPage';
-import ReportsPage from './components/Pages/ReportsPage';
+import ErrorPage from './pages/Errors/ErrorPage';
+import DashboardPage from './pages/Dashboard/DashboardPage';
+import PopulationPage from './pages/Population/PopulationPage';
+import ReportsPage from './pages/Reports/ReportsPage';
 
 function AppLayout() {
   const location = useLocation();
@@ -29,7 +28,6 @@ function AppLayout() {
         <Header />
         <Outlet />
         <Footer />
-        <LogoutButton />
       </div>
     </>
   );

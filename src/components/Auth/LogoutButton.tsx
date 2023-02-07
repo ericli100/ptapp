@@ -6,7 +6,7 @@ function LogoutButton() {
   return (
     <button
       type="button"
-      className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+      className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
       onClick={() =>
         logout({ logoutParams: { returnTo: window.location.origin } })
       }
