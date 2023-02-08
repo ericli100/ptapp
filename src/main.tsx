@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { UserContextProvider } from './components/Auth/UserContextProvider';
 import './index.css';
+import envConfiguration from './services/envValues';
 
 const gtmStagingId = 'GTM-MKG6L3V';
 const tagManagerArgs = {
@@ -16,14 +17,16 @@ const tagManagerArgs = {
 
 TagManager.initialize(tagManagerArgs);
 
+const { oAuthDomain, oAuthClientId, oAuthConnection } = envConfiguration;
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Auth0Provider
-      domain="login.dev-providertrust.com"
-      clientId="wbXKQZ14WdkNPH8NpbrjiyeQnU7Ed6gj"
+      domain={oAuthDomain}
+      clientId={oAuthClientId}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        connection: 'one-platform-ProviderTrust',
+        connection: oAuthConnection,
       }}
     >
       <UserContextProvider>
