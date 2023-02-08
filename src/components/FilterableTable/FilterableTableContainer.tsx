@@ -4,8 +4,7 @@ import PaginatedTable from './PaginatedTable';
 export default function FilterableTableContainer() {
   return (
     <div className="my-10">
-      <FilterTabs />
-      <div className="">
+      <div>
         <PaginatedTable />
       </div>
     </div>
