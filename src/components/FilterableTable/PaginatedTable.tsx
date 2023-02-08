@@ -47,7 +47,7 @@ function Table({
   return (
     <>
       <div className="min-w-full overflow-hidden overflow-x-auto border-0 shadow sm:rounded-lg">
-        <table className="min-w-full text-sm text-gray-700">
+        <table className="min-w-full bg-white text-sm text-gray-700">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>

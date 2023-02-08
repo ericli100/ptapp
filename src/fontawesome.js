@@ -9,6 +9,11 @@ import {
   faShieldCheck,
   faArrowLeftLong,
   faArrowRightLong,
+  faMagnifyingGlass,
+  faFilter,
+  faXmark,
+  faCheck,
+  faBarsStaggered,
 } from '@fortawesome/pro-light-svg-icons';
 
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
@@ -23,5 +28,10 @@ library.add(
   faChevronDown,
   faChevronUp,
   faArrowLeftLong,
-  faArrowRightLong
+  faArrowRightLong,
+  faMagnifyingGlass,
+  faFilter,
+  faXmark,
+  faCheck,
+  faBarsStaggered
 );
