@@ -1,78 +1,82 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import LoginButton from './components/Auth/LoginButton';
-import LogoutButton from './components/Auth/LogoutButton';
-import Profile from './components/Auth/Profile';
-import HelloWorld from './components/HelloWorld';
-import Logger from './services/Logger';
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  useLocation,
+} from 'react-router-dom';
+import { useEffect } from 'react';
+import AlertsPage from './pages/Alerts/AlertsPage';
+import Sidebar from './components/Sidebar/Sidebar';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import ErrorPage from './pages/Errors/ErrorPage';
+import DashboardPage from './pages/Dashboard/DashboardPage';
+import PopulationPage from './pages/Population/PopulationPage';
+import ReportsPage from './pages/Reports/ReportsPage';
+
+function AppLayout() {
+  const location = useLocation();
+  useEffect(() => {
+    console.log(location);
+    // TODO: EL - update NavigationContext
+  }, [location]);
+  return (
+    <>
+      <Sidebar />
+      <div id="content-container" className="flex flex-1 flex-col lg:pl-64">
+        <Header />
+        <Outlet />
+        <Footer />
+      </div>
+    </>
+  );
+}
 
 function App() {
-  Logger.log('Start of the app!');
-  const { isAuthenticated, isLoading } = useAuth0();
-  return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:flex  lg:justify-between lg:px-8">
-        <div className="max-w-xl">
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-            Provider Trust App Starter with Tailwind UI Example
-          </h2>
-          <h2>Environment Var = {window.VITE_API_URL} PROD-117</h2>
-          <p className="mt-5 text-xl text-gray-500">
-            This starter includes linting, tailwind ui and prettier code
-            formatting, as well as air bnb rules.
-          </p>
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
-          {isLoading && <div>Loading ...</div>}
-          {!isLoading && !isAuthenticated && (
-            <>
-              <p className="mt-5 text-xl text-gray-500">
-                Log in to see the super secret component.
-              </p>
-              <LoginButton />
-            </>
-          )}
-          {!isLoading && isAuthenticated && (
-            <>
-              <LogoutButton />
-              <HelloWorld variant="gray" />
-              <Profile />
-            </>
-          )}
-        </div>
-        <div className="mt-10 w-full max-w-xs">
-          <label
-            htmlFor="currency"
-            className="block text-base font-medium text-gray-500"
-          >
-            Currency
-            <div className="relative mt-1.5">
-              <select
-                id="currency"
-                name="currency"
-                className="block w-full appearance-none rounded-md border border-gray-300 bg-white bg-none py-2 pl-3 pr-10 text-base text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                defaultValue="United States (USD)"
-              >
-                <option>Argentina (ARS)</option>
-                <option>Australia (AUD)</option>
-                <option>United States (USD)</option>
-                <option>Canada (CAD)</option>
-                <option>France (EUR)</option>
-                <option>Japan (JPY)</option>
-                <option>Nigeria (NGN)</option>
-                <option>Switzerland (CHF)</option>
-                <option>United Kingdom (GBP)</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                <ChevronDownIcon
-                  className="h-4 w-4 text-gray-400"
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-          </label>
-        </div>
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <AppLayout />,
+      children: [
+        {
+          path: '/',
+          element: <AlertsPage />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: '/dashboard',
+          element: <DashboardPage />,
+        },
+        {
+          path: '/alerts',
+          element: <AlertsPage />,
+        },
+        {
+          path: '/population',
+          element: <PopulationPage />,
+        },
+        {
+          path: '/reports',
+          element: <ReportsPage />,
+        },
+      ],
+    },
+  ]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      loginWithRedirect();
+    }
+  }, [isAuthenticated, isLoading, loginWithRedirect]);
+  return (
+    <main>
+      <div className="min-h-full">
+        <RouterProvider router={router} />
       </div>
-    </div>
+    </main>
   );
 }
 

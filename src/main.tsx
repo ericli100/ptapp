@@ -2,9 +2,11 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import TagManager from 'react-gtm-module';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App';
 import { UserContextProvider } from './components/Auth/UserContextProvider';
 import './index.css';
+import './fontawesome';
 import envConfiguration from './services/envValues';
 
 const gtmStagingId = 'GTM-MKG6L3V';
