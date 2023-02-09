@@ -1,6 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import LogoutButton from '../Auth/LogoutButton';
 
 const userNavigation = [
@@ -9,11 +10,12 @@ const userNavigation = [
   { name: 'Notifications', href: '#' },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function HeaderAccountNavigation() {
+  const iconPrp: IconProp = 'fa-regular fa-chevron-down' as IconProp;
   return (
     <Menu as="div" className="relative ml-3">
       <div>
@@ -30,7 +32,7 @@ export default function HeaderAccountNavigation() {
             </span>
             Joey
             <FontAwesomeIcon
-              icon="fa-regular fa-chevron-down"
+              icon={iconPrp}
               className="ml-2 hidden h-3 w-3 flex-shrink-0 text-navy-400 lg:inline-block"
             />
           </span>
