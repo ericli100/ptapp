@@ -10,11 +10,14 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      # - name: Copy .npmrc
-      #   run: cp -f .github/deployment/.npmrc .npmrc
+      - name: Copy .npmrc
+        run: cp -f .github/deployment/.npmrc .npmrc
 
-      # - name: Set VAR_NPM_PASSWORD
-      #   run: sed -i "s/VAR_NPM_PASSWORD/${{ secrets.GITHUB_TOKEN }}/" .npmrc
+      - name: Set VAR_NPM_PASSWORD
+        run: sed -i "s/VAR_NPM_PASSWORD/${{ secrets.GITHUB_TOKEN }}/" .npmrc
+
+      - name: Set VAR_FONTAWESOME_TOKEN
+        run: sed -i "s/VAR_FONTAWESOME_TOKEN/${{ secrets.FONTAWESOME_TOKEN }}/" .npmrc
 
       - name: Build and Push to GitHub Packages
         uses: docker/build-push-action@v1

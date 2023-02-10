@@ -3,7 +3,7 @@ FROM node:18.12.1-alpine as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
-# COPY ./.github/deployment/.npmrc /app/.npmrc
+COPY .npmrc /app/.npmrc
 
 RUN npm install
 COPY . /app
