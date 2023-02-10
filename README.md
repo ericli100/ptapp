@@ -7,9 +7,9 @@
 - DevContainer and Docker. This project uses [DevContainer](https://code.visualstudio.com/docs/devcontainers/containers) to set up the development environment, therefore, Docker is required.
 - IDE with devContainer support. Initially, the project was created with Visual Studio Code
 
-## FontAwesome 
+### FontAwesome 
 
-In order to build PTApp fontawesome update .npmrc in root of PTApp
+In order to build PTApp fontawesome create/update .npmrc in root of PTApp
 ```
 legacy-peer-deps=true
 
@@ -25,10 +25,12 @@ DONT COMMIT TO GITHUB
 ### Running the project in VS Code
 
 - Open the project in VSCode.
+- Once opened and Trusted you may see a popup in the bottom right. `Dev Containers` extension is recommended... Click install.
 - VS Code should prompt: "Folder contains a Dev Container configuration file. Reopen folder to develop in a container ". Follow the prompt to reopen the project in Container.
-- If you missed the prompt, "Dev Container: Rebuild and Reopen in Container"
+- If you missed the prompt, use command "Dev Container: Rebuild and Reopen in Container" or Click green tab on bottom right and 
+  click reopen 
 
-For non dev environment variables update `.env.development.local`
+For non dev environment variables create/update `.env.development.local`
 
 Once you are in the container, run `npm install`, then `npm run dev`
 
@@ -40,7 +42,7 @@ If you need to build a image for a specific env use ex. `--platform linux/amd64`
 
 To build: `docker build --no-cache -t providertrust/ptapp:0.1.0-beta.1 .`
 
-Locally update `.env.development.local` to run with specific environments.
+Locally create/update `.env.development.local` to run with specific environments.
 
 To run: `docker run --env-file .env.development.local -p 8080:80 -it providertrust/ptapp:0.1.0-beta.1`
 
@@ -51,6 +53,7 @@ Uses github actions and github repo secrets to build container with necessary se
 ## Environment Variables
 
 - Update `.github/deployment/bootstrap.sh` with new environment variables.
+- Update `.env.development` with new environment variables.
 - Update `public/config.js` with new env variables.
 - Update `src/services/envValues.ts` with new env variables.
 - Update `src/global.d.ts` with new env variables.
