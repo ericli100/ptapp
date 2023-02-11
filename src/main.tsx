@@ -1,13 +1,11 @@
-import { Auth0Provider } from '@auth0/auth0-react';
+import { RouterProvider } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import Router from './Router';
 
-import App from './App';
-import { UserContextProvider } from './components/Auth/UserContextProvider';
 import './index.css';
 import './fontawesome';
-import envConfiguration from './services/envValues';
 
 const gtmStagingId = 'GTM-MKG6L3V';
 const tagManagerArgs = {
@@ -19,21 +17,8 @@ const tagManagerArgs = {
 
 TagManager.initialize(tagManagerArgs);
 
-const { oAuthDomain, oAuthClientId, oAuthConnection } = envConfiguration;
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Auth0Provider
-      domain={oAuthDomain}
-      clientId={oAuthClientId}
-      authorizationParams={{
-        redirect_uri: window.location.origin,
-        connection: oAuthConnection,
-      }}
-    >
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
-    </Auth0Provider>
+    <RouterProvider router={Router} />
   </React.StrictMode>
 );
