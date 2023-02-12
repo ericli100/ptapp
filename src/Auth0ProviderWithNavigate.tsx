@@ -13,6 +13,7 @@ function Auth0ProviderWithNavigate({ children }: Props) {
     oAuthDomain: domain,
     oAuthClientId: clientId,
     oAuthConnection: connection,
+    // oAuthAudience: audience,
   } = envConfiguration;
 
   const redirectUri = window.location.origin;
@@ -36,6 +37,7 @@ function Auth0ProviderWithNavigate({ children }: Props) {
       authorizationParams={{
         redirect_uri: redirectUri,
         connection,
+        // audience,
       }}
       onRedirectCallback={onRedirectCallback}
     >
