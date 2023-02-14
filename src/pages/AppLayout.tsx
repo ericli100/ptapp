@@ -7,12 +7,6 @@ import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 
 function AppLayout() {
-  // useEffect(() => {
-  //   if (!isAuthenticated && !isLoading) {
-  //     loginWithRedirect();
-  //   }
-  // }, [isAuthenticated, isLoading, loginWithRedirect]);
-
   const { isAuthenticated } = useAuth0();
 
   // if not authenticated, hide all elements but render outlet, which will trigger auth guard in sub routes.

@@ -1,4 +1,4 @@
-import { AppState, Auth0Provider, User } from '@auth0/auth0-react';
+import { AppState, Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import envConfiguration from './services/envValues';
@@ -13,16 +13,12 @@ function Auth0ProviderWithNavigate({ children }: Props) {
     oAuthDomain: domain,
     oAuthClientId: clientId,
     oAuthConnection: connection,
-    // oAuthAudience: audience,
+    oAuthAudience: audience,
   } = envConfiguration;
 
   const redirectUri = window.location.origin;
 
-  const onRedirectCallback = (
-    appState: AppState | undefined,
-    // eslint-disable-next-line no-unused-vars
-    user: User | undefined
-  ) => {
+  const onRedirectCallback = (appState: AppState | undefined) => {
     navigate(appState?.returnTo || window.location.pathname);
   };
 
@@ -37,7 +33,7 @@ function Auth0ProviderWithNavigate({ children }: Props) {
       authorizationParams={{
         redirect_uri: redirectUri,
         connection,
-        // audience,
+        audience,
       }}
       onRedirectCallback={onRedirectCallback}
     >

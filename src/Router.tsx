@@ -11,7 +11,6 @@ import App from './App';
 const Router = createBrowserRouter([
   {
     path: '/',
-    // element: <AuthenticationGuard component={App} />,
     element: <App />,
     children: [
       {
