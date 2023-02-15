@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import {
@@ -8,6 +10,8 @@ import {
   getFilteredRowModel,
   ColumnDef,
   flexRender,
+  createColumnHelper,
+  CellContext,
 } from '@tanstack/react-table';
 import { Alert, AlertSortByString } from '../../models/alert';
 
@@ -21,18 +25,28 @@ import useAlertServices, {
   convertSortingStateToSortParams,
 } from '../../services/alertServices';
 
+// TODO: JOSH - This is the component for custom cell.
+function StatusCell({ getValue }: CellContext<Alert, string>) {
+  return (
+    <span>
+      <b>{getValue()}</b>
+    </span>
+  );
+}
+
 export default function AlertsTable() {
   const { getAlerts: getAlertsFromService } = useAlertServices();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [pageCount, setPageCount] = useState(-1);
 
-  const columns = useMemo<ColumnDef<Alert>[]>(
+  const columnHelper = createColumnHelper<Alert>();
+
+  const columns = useMemo<ColumnDef<Alert, string>[]>(
     () => [
-      {
-        header: 'Status',
-        accessorKey: 'reviewStatus',
-        cell: (info) => info.getValue(),
-      },
+      // TODO: JOSH - this uses custom component.
+      columnHelper.accessor('reviewStatus', {
+        cell: (props) => <StatusCell {...props} />,
+      }),
       {
         header: 'Name',
         accessorKey: 'name',
@@ -65,7 +79,7 @@ export default function AlertsTable() {
         cell: (info) => format(info.row.original.creationDate, 'MM/dd/yyyy'),
       },
     ],
-    []
+    [columnHelper]
   );
 
   const defaultData = useMemo(() => [], []);

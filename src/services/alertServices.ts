@@ -10,12 +10,13 @@ import {
 
 function convertAlertDTO(dto: AlertDTO): Alert {
   return {
-    reviewStatus: dto.reviewStatus,
-    name: dto.monitoredSubjectName,
-    id: dto.npi,
-    alertType: dto.monitorProduct,
-    source: dto.sourceName,
-    result: dto.resultStatus as 'Match' | 'Suspected Match' | 'No Match',
+    reviewStatus: dto.reviewStatus ?? '',
+    name: dto.monitoredSubjectName ?? '',
+    id: dto.npi ?? '',
+    alertType: dto.monitorProduct ?? '',
+    source: dto.sourceName ?? '',
+    result:
+      (dto.resultStatus as 'Match' | 'Suspected Match' | 'No Match') ?? ' ',
     creationDate: new Date(dto.alertDate),
   };
 }
