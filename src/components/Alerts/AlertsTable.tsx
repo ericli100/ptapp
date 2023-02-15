@@ -11,41 +11,30 @@ import {
   ColumnDef,
   flexRender,
   createColumnHelper,
-  CellContext,
 } from '@tanstack/react-table';
 import { Alert, AlertSortByString } from '../../models/alert';
 
 import {
-  // ChevronDownIcon,
-  // ChevronUpIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
 } from './Icons';
 import useAlertServices, {
   convertSortingStateToSortParams,
 } from '../../services/alertServices';
-
-// TODO: JOSH - This is the component for custom cell.
-function StatusCell({ getValue }: CellContext<Alert, string>) {
-  return (
-    <span>
-      <b>{getValue()}</b>
-    </span>
-  );
-}
+import StatusCell from './StatusCell';
 
 export default function AlertsTable() {
   const { getAlerts: getAlertsFromService } = useAlertServices();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [pageCount, setPageCount] = useState(-1);
-
   const columnHelper = createColumnHelper<Alert>();
-
   const columns = useMemo<ColumnDef<Alert, string>[]>(
     () => [
-      // TODO: JOSH - this uses custom component.
       columnHelper.accessor('reviewStatus', {
-        cell: (props) => <StatusCell {...props} />,
+        header: 'Status',
+        cell: (info) => <StatusCell status={info.getValue()} />,
       }),
       {
         header: 'Name',
@@ -244,8 +233,8 @@ export default function AlertsTable() {
                             header.getContext()
                           )}
                           {{
-                            asc: ' 🔼',
-                            desc: ' 🔽',
+                            asc: <ChevronUpIcon />,
+                            desc: <ChevronDownIcon />,
                           }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       )}
