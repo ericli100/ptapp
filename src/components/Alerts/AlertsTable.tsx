@@ -31,7 +31,7 @@ export default function AlertsTable() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [pageCount, setPageCount] = useState(-1);
   const columnHelper = createColumnHelper<Alert>();
-  const columns = useMemo<ColumnDef<Alert, string>[]>(
+  const columns = useMemo<ColumnDef<Alert, any>[]>(
     () => [
       columnHelper.accessor('reviewStatus', {
         header: 'Status',
