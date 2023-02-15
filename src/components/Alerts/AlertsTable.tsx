@@ -24,6 +24,7 @@ import useAlertServices, {
   convertSortingStateToSortParams,
 } from '../../services/alertServices';
 import StatusCell from './StatusCell';
+import ResultCell from './ResultCell';
 
 export default function AlertsTable() {
   const { getAlerts: getAlertsFromService } = useAlertServices();
@@ -57,11 +58,10 @@ export default function AlertsTable() {
         accessorKey: 'source',
         cell: (info) => info.getValue(),
       },
-      {
+      columnHelper.accessor('result', {
         header: 'Result',
-        accessorKey: 'result',
-        cell: (info) => info.getValue(),
-      },
+        cell: (info) => <ResultCell result={info.getValue()} />,
+      }),
       {
         header: 'Created',
         accessorKey: 'creationDate',
