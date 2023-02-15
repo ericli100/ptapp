@@ -22,8 +22,8 @@ function convertAlertDTO(dto: AlertDTO): Alert {
 }
 
 type SortParam = {
-  sortBy: AlertSortByString | undefined;
-  desc: boolean | undefined;
+  sortBy: AlertSortByString;
+  desc: boolean;
 };
 
 export function convertSortingStateToSortParams(
@@ -32,7 +32,7 @@ export function convertSortingStateToSortParams(
   // UI supports only one sort.
 
   if (sorting.length === 0) {
-    return { sortBy: undefined, desc: undefined };
+    return { sortBy: '', desc: false };
   }
   const { id: sortByString, desc } = sorting[0];
   let sortBy: AlertSortByString;
@@ -72,10 +72,11 @@ export default function useAlertServices() {
     async function getAlerts(
       page: number,
       size: number,
-      sortBy?: AlertSortByString,
-      desc?: boolean
+      sortBy: AlertSortByString,
+      desc: boolean,
+      filter: string
     ): Promise<AlertsInfo> {
-      const { data } = await getAlertsApi(page, size, sortBy, desc);
+      const { data } = await getAlertsApi(page, size, sortBy, desc, filter);
       return {
         page: data.page,
         size: data.size,

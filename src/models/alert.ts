@@ -54,4 +54,5 @@ export type AlertSortByString =
   | 'RESULTSTATUS'
   | 'ALERTDATE'
   | 'REVIEWSTATUS'
-  | 'ALERTREASONS';
+  | 'ALERTREASONS'
+  | '';

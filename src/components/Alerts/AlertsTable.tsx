@@ -20,7 +20,7 @@ import {
   // ChevronUpIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
-} from './Icons';
+} from '../Icons/Icons';
 import useAlertServices, {
   convertSortingStateToSortParams,
 } from '../../services/alertServices';
@@ -34,7 +34,7 @@ function StatusCell({ getValue }: CellContext<Alert, string>) {
   );
 }
 
-export default function AlertsTable() {
+export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   const { getAlerts: getAlertsFromService } = useAlertServices();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [pageCount, setPageCount] = useState(-1);
@@ -103,12 +103,14 @@ export default function AlertsTable() {
     paginationState: PaginationState;
     sortingState: SortingState;
     triggeredBy: 'Loading' | 'Paging' | 'Sorting' | 'Searching';
+    filter: string;
   };
 
   const initialConfig: AlertsRetrievalConfig = {
     paginationState: { pageIndex: 0, pageSize: 25 },
     sortingState: [],
     triggeredBy: 'Loading',
+    filter: '',
   };
 
   const [alertsRetrievalConfig, setAlertsRetrievalConfig] =
@@ -140,12 +142,23 @@ export default function AlertsTable() {
     });
   }, [sorting]);
 
+  // if searchTerm has changed
+  useEffect(() => {
+    setAlertsRetrievalConfig((config) => {
+      return {
+        ...config,
+        filter: searchTerm,
+        triggeredBy: 'Searching',
+      };
+    });
+  }, [searchTerm]);
+
   // Handle AlertRetrievalConfig Change
   useEffect(() => {
     // load alerts using config
     async function loadAlerts() {
-      let sortBy: AlertSortByString | undefined;
-      let desc: boolean | undefined;
+      let sortBy: AlertSortByString = '';
+      let desc: boolean = false;
       if (alertsRetrievalConfig.sortingState) {
         const sortByParams = convertSortingStateToSortParams(
           alertsRetrievalConfig.sortingState
@@ -162,7 +175,13 @@ export default function AlertsTable() {
         size = alertsRetrievalConfig.paginationState.pageSize;
       }
 
-      return getAlertsFromService(page, size, sortBy, desc);
+      return getAlertsFromService(
+        page,
+        size,
+        sortBy,
+        desc,
+        alertsRetrievalConfig.filter
+      );
     }
 
     async function loadPagedAlerts() {
@@ -182,6 +201,16 @@ export default function AlertsTable() {
       }));
     }
 
+    async function loadSearchedAlerts() {
+      const alertsInfo = await loadAlerts();
+      setAlerts(alertsInfo.alerts);
+      setPageCount(alertsInfo.pageCount);
+      setPagination((p) => ({
+        pageIndex: 0,
+        pageSize: p.pageSize,
+      }));
+    }
+
     switch (alertsRetrievalConfig.triggeredBy) {
       case 'Loading':
       case 'Paging':
@@ -189,6 +218,9 @@ export default function AlertsTable() {
         break;
       case 'Sorting':
         loadSortedAlerts();
+        break;
+      case 'Searching':
+        loadSearchedAlerts();
         break;
       default:
         throw new Error(
