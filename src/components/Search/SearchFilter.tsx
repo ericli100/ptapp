@@ -1,3 +1,4 @@
+import { DebounceInput } from 'react-debounce-input';
 import { MagnifyingGlassIcon } from '../Icons/Icons';
 
 type Props = {
@@ -13,17 +14,21 @@ export default function SearchFilter({ searchTerm, setSearchTerm }: Props) {
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <MagnifyingGlassIcon />
           </div>
-          <label htmlFor="search" className="block text-sm font-medium">
-            <input
-              value={searchTerm}
-              onChange={(evt) => setSearchTerm(evt.target.value)}
-              type="text"
-              name="search"
-              id="search"
-              className="block w-full rounded-md border-gray-300 pl-9 pr-12 text-navy-400 placeholder:text-navy-300 focus:border-ptBlue-500 focus:ring-ptBlue-500 sm:text-sm"
-              placeholder="Search alert data..."
-            />
-          </label>
+
+          <DebounceInput
+            minLength={3}
+            debounceTimeout={300}
+            value={searchTerm}
+            onChange={(evt) => setSearchTerm(evt.target.value)}
+            type="text"
+            name="search"
+            id="search"
+            className="block w-full rounded-md border-gray-300 pl-9 pr-12 text-navy-400 placeholder:text-navy-300 focus:border-ptBlue-500 focus:ring-ptBlue-500 sm:text-sm"
+            placeholder="Search name or NPI…"
+          />
+          <div className="pointer-events-none absolute inset-y-0 right-6 flex items-center pl-3">
+            <MagnifyingGlassIcon />
+          </div>
         </div>
       </div>
     </div>
