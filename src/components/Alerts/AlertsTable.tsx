@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import {
   PaginationState,
+  SortingState,
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,
   ColumnDef,
   flexRender,
 } from '@tanstack/react-table';
-import { Alert } from '../../models/alert';
+import { Alert, AlertSortByString } from '../../models/alert';
 
 import {
   // ChevronDownIcon,
@@ -16,9 +17,11 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
 } from './Icons';
-import useAlertServices from '../../services/alertServices';
+import useAlertServices, {
+  convertSortingStateToSortParams,
+} from '../../services/alertServices';
 
-export default function AletsTable() {
+export default function AlertsTable() {
   const { getAlerts: getAlertsFromService } = useAlertServices();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [pageCount, setPageCount] = useState(-1);
@@ -72,6 +75,8 @@ export default function AletsTable() {
     pageSize: 25,
   });
 
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const pagination = useMemo(
     () => ({
       pageIndex,
@@ -80,28 +85,120 @@ export default function AletsTable() {
     [pageIndex, pageSize]
   );
 
+  type AlertsRetrievalConfig = {
+    paginationState: PaginationState;
+    sortingState: SortingState;
+    triggeredBy: 'Loading' | 'Paging' | 'Sorting' | 'Searching';
+  };
+
+  const initialConfig: AlertsRetrievalConfig = {
+    paginationState: { pageIndex: 0, pageSize: 25 },
+    sortingState: [],
+    triggeredBy: 'Loading',
+  };
+
+  const [alertsRetrievalConfig, setAlertsRetrievalConfig] =
+    useState<AlertsRetrievalConfig>(initialConfig);
+
+  // if paging has changed
   useEffect(() => {
-    async function loadAlerts(page: number, size: number) {
-      const alertsInfo = await getAlertsFromService(page, size);
+    setAlertsRetrievalConfig((config) => {
+      return {
+        ...config,
+        paginationState: { pageIndex, pageSize },
+        triggeredBy: 'Paging',
+      };
+    });
+  }, [pageIndex, pageSize]);
+
+  // if sorting has changed
+  useEffect(() => {
+    setAlertsRetrievalConfig((config) => {
+      return {
+        ...config,
+        sortingState: sorting,
+        triggeredBy: 'Sorting',
+        paginationState: {
+          ...config.paginationState,
+          pageIndex: 0,
+        },
+      };
+    });
+  }, [sorting]);
+
+  // Handle AlertRetrievalConfig Change
+  useEffect(() => {
+    // load alerts using config
+    async function loadAlerts() {
+      let sortBy: AlertSortByString | undefined;
+      let desc: boolean | undefined;
+      if (alertsRetrievalConfig.sortingState) {
+        const sortByParams = convertSortingStateToSortParams(
+          alertsRetrievalConfig.sortingState
+        );
+        sortBy = sortByParams.sortBy;
+        desc = sortByParams.desc;
+      }
+
+      let page: number = -1;
+      let size: number = -1;
+
+      if (alertsRetrievalConfig.paginationState) {
+        page = alertsRetrievalConfig.paginationState.pageIndex;
+        size = alertsRetrievalConfig.paginationState.pageSize;
+      }
+
+      return getAlertsFromService(page, size, sortBy, desc);
+    }
+
+    async function loadPagedAlerts() {
+      const alertsInfo = await loadAlerts();
       setAlerts(alertsInfo.alerts);
       setPageCount(alertsInfo.pageCount);
-      setPagination({ pageIndex: page, pageSize: size });
+      setPagination({ pageIndex: alertsInfo.page, pageSize: alertsInfo.size });
     }
-    loadAlerts(pageIndex, pageSize);
-  }, [getAlertsFromService, pageIndex, pageSize]);
 
+    async function loadSortedAlerts() {
+      const alertsInfo = await loadAlerts();
+      setAlerts(alertsInfo.alerts);
+      setPageCount(alertsInfo.pageCount);
+      setPagination((p) => ({
+        pageIndex: 0,
+        pageSize: p.pageSize,
+      }));
+    }
+
+    switch (alertsRetrievalConfig.triggeredBy) {
+      case 'Loading':
+      case 'Paging':
+        loadPagedAlerts();
+        break;
+      case 'Sorting':
+        loadSortedAlerts();
+        break;
+      default:
+        throw new Error(
+          `Invalid triggedBy value of ${alertsRetrievalConfig.triggeredBy}`
+        );
+    }
+  }, [alertsRetrievalConfig, getAlertsFromService]);
+
+  // Alerts Table
   const table = useReactTable({
     data: alerts ?? defaultData,
     columns,
     pageCount,
     state: {
       pagination,
+      sorting,
     },
+    onSortingChange: setSorting,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     // getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
+    autoResetPageIndex: false,
     debugTable: true,
   });
 
@@ -120,11 +217,22 @@ export default function AletsTable() {
                       className="bg-blue-100 py-6 px-6 text-left font-semibold"
                     >
                       {header.isPlaceholder ? null : (
-                        <div>
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? 'cursor-pointer select-none'
+                              : '',
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
+                          {{
+                            asc: ' 🔼',
+                            desc: ' 🔽',
+                          }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       )}
                     </th>

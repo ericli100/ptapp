@@ -45,3 +45,13 @@ export type AlertsInfo = {
   total: number;
   pageCount: number;
 };
+
+export type AlertSortByString =
+  | 'MONITOREDSUBJECTNAME'
+  | 'NPI'
+  | 'MONITORPRODUCT'
+  | 'SOURCENAME'
+  | 'RESULTSTATUS'
+  | 'ALERTDATE'
+  | 'REVIEWSTATUS'
+  | 'ALERTREASONS';
