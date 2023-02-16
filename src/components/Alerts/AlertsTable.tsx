@@ -88,13 +88,32 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     [pageIndex, pageSize]
   );
 
+  // Alerts Table
+  const table = useReactTable({
+    data: alerts ?? defaultData,
+    columns,
+    pageCount,
+    state: {
+      pagination,
+      sorting,
+    },
+    onSortingChange: setSorting,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    autoResetPageIndex: false,
+    debugTable: false,
+  });
+
+  // configuration to retrieve data.
   type AlertsRetrievalConfig = {
     paginationState: PaginationState;
     sortingState: SortingState;
     triggeredBy: 'Loading' | 'Paging' | 'Sorting' | 'Searching';
     filter: string;
   };
-
   const initialConfig: AlertsRetrievalConfig = {
     paginationState: { pageIndex: 0, pageSize: 25 },
     sortingState: [],
@@ -217,25 +236,6 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
         );
     }
   }, [alertsRetrievalConfig, getAlertsFromService]);
-
-  // Alerts Table
-  const table = useReactTable({
-    data: alerts ?? defaultData,
-    columns,
-    pageCount,
-    state: {
-      pagination,
-      sorting,
-    },
-    onSortingChange: setSorting,
-    onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
-    manualPagination: true,
-    autoResetPageIndex: false,
-    debugTable: true,
-  });
 
   return (
     <>

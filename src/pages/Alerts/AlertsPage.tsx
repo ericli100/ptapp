@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import IndexPageHeader from '../../components/Pages/IndexPageHeader';
 import AlertsTable from '../../components/Alerts/AlertsTable';
 
@@ -11,6 +11,9 @@ import AlertTypesDropDown from '../../components/FilterableTable/AlertTypesDropD
 
 export default function AlertsPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const resetSearchTerm = useCallback(() => {
+    setSearchTerm('');
+  }, []);
   return (
     <section className="">
       <div className="mx-auto max-w-6xl px-4  pt-7 lg:px-8">
@@ -22,6 +25,7 @@ export default function AlertsPage() {
               <SearchFilter
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
+                resetSearchTerm={resetSearchTerm}
               />
               <div className="flex gap-x-3">
                 <AddFiltersModal />
