@@ -7,8 +7,6 @@ import SearchFilter from '../../components/Search/SearchFilter';
 import AddFiltersModal from '../../components/FilterableTable/AddFiltersModal';
 import AlertTypesDropDown from '../../components/FilterableTable/AlertTypesDropDown';
 
-// import { Alert } from '../../models/alert';
-
 export default function AlertsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const resetSearchTerm = useCallback(() => {
