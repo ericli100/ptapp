@@ -111,9 +111,8 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     filter: string;
   };
 
-  // TODO: EL - reset pagination rows
   const initialConfig: AlertsRetrievalConfig = {
-    paginationState: { pageIndex: 0, pageSize: 5 },
+    paginationState: { pageIndex: 0, pageSize: 25 },
     sortingState: [],
     triggeredBy: 'Loading',
     filter: '',
@@ -294,21 +293,19 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
           </tbody>
         </table>
       </div>
-      <Pager
-        pageIndex={table.getState().pagination.pageIndex + 1}
-        pageCount={table.getPageCount()}
-        goPrevious={table.previousPage}
-        canPrevious={table.getCanPreviousPage()}
-        goNext={table.nextPage}
-        canNext={table.getCanNextPage()}
-        pageSize={table.getState().pagination.pageSize}
-        goPage={(idx) =>
-          setPagination({
-            pageIndex: idx,
-            pageSize: table.getState().pagination.pageSize,
-          })
-        }
-      />
+      {/* {false && (
+        <Pager
+          pageIndex={table.getState().pagination.pageIndex + 1}
+          pageCount={table.getPageCount()}
+          pageSize={table.getState().pagination.pageSize}
+          goPage={(idx) =>
+            setPagination({
+              pageIndex: idx,
+              pageSize: table.getState().pagination.pageSize,
+            })
+          }
+        />
+      )} */}
       <hr />
     </>
   );
