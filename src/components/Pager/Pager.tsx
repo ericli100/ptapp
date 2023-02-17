@@ -1,16 +1,15 @@
-import { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { ArrowLeftIcon, ArrowRightIcon } from '../Icons/Icons';
 
 type PaperProps = {
-  pageIndex: number;
+  pageNumber: number;
   pageCount: number;
   pageSize: number;
   // eslint-disable-next-line no-unused-vars
   goPage: (page: number) => void;
 };
 export default function Pager({
-  pageIndex,
+  pageNumber,
   pageCount,
   pageSize,
   goPage,
@@ -27,21 +26,22 @@ export default function Pager({
           <span className="flex items-center gap-1 pt-4 text-navy-500">
             <div>Page</div>
             <strong>
-              {pageIndex} of {pageCount}
+              {pageNumber} of {pageCount}
             </strong>
           </span>
         </div>
 
         <div className="hidden md:-mt-px md:flex">
-          {pageIndex > 0 && (
+          {pageNumber > 0 && (
             <ReactPaginate
               previousLabel={<ArrowLeftIcon />}
               nextLabel={<ArrowRightIcon />}
               breakLabel="..."
               breakClassName="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500"
               breakLinkClassName="page-link"
+              forcePage={pageNumber - 1}
               pageCount={pageCount}
-              pageRangeDisplayed={4}
+              pageRangeDisplayed={3}
               marginPagesDisplayed={2}
               onPageChange={handlePageClick}
               containerClassName="flex items-center justify-between border-t border-gray-200"
