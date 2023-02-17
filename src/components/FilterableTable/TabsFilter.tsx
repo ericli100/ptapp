@@ -14,7 +14,7 @@ export default function TabItemPropsTypes() {
   }
 
   return (
-    <div className="mb-2 sm:mb-6 lg:mx-auto lg:max-w-6xl">
+    <div className="mb-6 sm:mb-6 lg:mx-auto lg:max-w-6xl">
       <div className="sm:hidden">
         <label htmlFor="tabs">
           <span className="sr-only">Select a tab</span>

@@ -48,7 +48,7 @@ export default function Pager({
               pageClassName="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
               previousClassName="inline-flex items-center border-t-2 border-transparent pt-4  text-sm font-medium text-navy-500 hover:border-gray-300 hover:text-navy-700"
               nextClassName="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-navy-500"
-              activeClassName="inline-flex items-center border-t-2 border-indigo-500 px-4 pt-4 text-sm font-medium text-indigo-600"
+              activeClassName="inline-flex items-center border-t-2 border-ptBlue-500 px-4 pt-4 text-sm font-medium text-ptBlue-600"
             />
           )}
         </div>
