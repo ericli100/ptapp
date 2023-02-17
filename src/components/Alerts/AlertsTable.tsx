@@ -21,6 +21,7 @@ import useAlertServices, {
 import StatusCell from './StatusCell';
 import ResultCell from './ResultCell';
 import Pager from '../Pager/Pager';
+import NameCell from './NameCell';
 
 export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   const { getAlerts: getAlertsFromService } = useAlertServices();
@@ -33,11 +34,10 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
         header: 'Status',
         cell: (info) => <StatusCell status={info.getValue()} />,
       }),
-      {
+      columnHelper.accessor('name', {
         header: 'Name',
-        accessorKey: 'name',
-        cell: (info) => info.getValue(),
-      },
+        cell: (info) => <NameCell name={info.getValue()} />,
+      }),
       {
         header: 'ID Number',
         accessorKey: 'id',

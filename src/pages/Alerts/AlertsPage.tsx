@@ -19,13 +19,13 @@ export default function AlertsPage() {
         <div className="my-10">
           <div>
             <TabsFilter />
-            <div className="mb-6 justify-between lg:flex">
+            <div className="mb-6 justify-between md:flex">
               <SearchFilter
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 resetSearchTerm={resetSearchTerm}
               />
-              <div className="flex gap-x-3">
+              <div className="hidden gap-x-3 md:flex">
                 <AddFiltersModal />
                 <AlertTypesDropDown />
               </div>
