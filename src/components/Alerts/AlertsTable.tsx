@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import {
   PaginationState,
@@ -14,17 +14,13 @@ import {
 } from '@tanstack/react-table';
 import { Alert, AlertSortByString } from '../../models/alert';
 
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-} from '../Icons/Icons';
+import { ChevronDownIcon, ChevronUpIcon } from '../Icons/Icons';
 import useAlertServices, {
   convertSortingStateToSortParams,
 } from '../../services/alertServices';
 import StatusCell from './StatusCell';
 import ResultCell from './ResultCell';
+import Pager from '../Pager/Pager';
 
 export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   const { getAlerts: getAlertsFromService } = useAlertServices();
@@ -73,20 +69,39 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
 
   const defaultData = useMemo(() => [], []);
 
+  // Configuration for pageIndex, pageSize and alertRetrievalConfig
+
+  // paging
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 25,
+    pageIndex: -1,
+    pageSize: -1,
   });
 
+  const [tablePagination, setTablePagination] = useState({
+    pageIndex: -1,
+    pageSize: -1,
+  });
+
+  // sorting
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const pagination = useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
-  );
+  // configuration to retrieve data.
+  type AlertsRetrievalConfig = {
+    paginationState: PaginationState;
+    sortingState: SortingState;
+    triggeredBy: 'Loading' | 'Paging' | 'Sorting' | 'Searching';
+    filter: string;
+  };
+
+  const initialConfig: AlertsRetrievalConfig = {
+    paginationState: { pageIndex: 0, pageSize: 25 },
+    sortingState: [],
+    triggeredBy: 'Loading',
+    filter: '',
+  };
+
+  const [alertsRetrievalConfig, setAlertsRetrievalConfig] =
+    useState<AlertsRetrievalConfig>(initialConfig);
 
   // Alerts Table
   const table = useReactTable({
@@ -94,7 +109,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     columns,
     pageCount,
     state: {
-      pagination,
+      pagination: tablePagination,
       sorting,
     },
     onSortingChange: setSorting,
@@ -107,25 +122,13 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     debugTable: false,
   });
 
-  // configuration to retrieve data.
-  type AlertsRetrievalConfig = {
-    paginationState: PaginationState;
-    sortingState: SortingState;
-    triggeredBy: 'Loading' | 'Paging' | 'Sorting' | 'Searching';
-    filter: string;
-  };
-  const initialConfig: AlertsRetrievalConfig = {
-    paginationState: { pageIndex: 0, pageSize: 25 },
-    sortingState: [],
-    triggeredBy: 'Loading',
-    filter: '',
-  };
-
-  const [alertsRetrievalConfig, setAlertsRetrievalConfig] =
-    useState<AlertsRetrievalConfig>(initialConfig);
-
+  const paginationInitialLoad = useRef(true);
   // if paging has changed
   useEffect(() => {
+    if (paginationInitialLoad.current) {
+      paginationInitialLoad.current = false;
+      return;
+    }
     setAlertsRetrievalConfig((config) => {
       return {
         ...config,
@@ -135,8 +138,13 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     });
   }, [pageIndex, pageSize]);
 
+  const sortingInitialLoad = useRef(true);
   // if sorting has changed
   useEffect(() => {
+    if (sortingInitialLoad.current) {
+      sortingInitialLoad.current = false;
+      return;
+    }
     setAlertsRetrievalConfig((config) => {
       return {
         ...config,
@@ -150,8 +158,13 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     });
   }, [sorting]);
 
+  const SearchTermInitialLoad = useRef(true);
   // if searchTerm has changed
   useEffect(() => {
+    if (SearchTermInitialLoad.current) {
+      SearchTermInitialLoad.current = false;
+      return;
+    }
     setAlertsRetrievalConfig((config) => {
       return {
         ...config,
@@ -164,7 +177,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   // Handle AlertRetrievalConfig Change
   useEffect(() => {
     // load alerts using config
-    async function loadAlerts() {
+    async function loadAlerts(resetToFirstPage: boolean = false) {
       let sortBy: AlertSortByString = '';
       let desc: boolean = false;
       if (alertsRetrievalConfig.sortingState) {
@@ -175,13 +188,15 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
         desc = sortByParams.desc;
       }
 
-      let page: number = -1;
-      let size: number = -1;
+      let page: number = -99;
+      let size: number = -99;
 
       if (alertsRetrievalConfig.paginationState) {
         page = alertsRetrievalConfig.paginationState.pageIndex;
         size = alertsRetrievalConfig.paginationState.pageSize;
       }
+
+      page = resetToFirstPage ? 0 : page;
 
       return getAlertsFromService(
         page,
@@ -196,24 +211,27 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
       const alertsInfo = await loadAlerts();
       setAlerts(alertsInfo.alerts);
       setPageCount(alertsInfo.pageCount);
-      setPagination({ pageIndex: alertsInfo.page, pageSize: alertsInfo.size });
+      setTablePagination({
+        pageIndex: alertsInfo.page,
+        pageSize: alertsInfo.size,
+      });
     }
 
     async function loadSortedAlerts() {
       const alertsInfo = await loadAlerts();
       setAlerts(alertsInfo.alerts);
       setPageCount(alertsInfo.pageCount);
-      setPagination((p) => ({
+      setTablePagination((p) => ({
         pageIndex: 0,
         pageSize: p.pageSize,
       }));
     }
 
     async function loadSearchedAlerts() {
-      const alertsInfo = await loadAlerts();
+      const alertsInfo = await loadAlerts(true);
       setAlerts(alertsInfo.alerts);
       setPageCount(alertsInfo.pageCount);
-      setPagination((p) => ({
+      setTablePagination((p) => ({
         pageIndex: 0,
         pageSize: p.pageSize,
       }));
@@ -296,42 +314,22 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
           </tbody>
         </table>
       </div>
+      {/* <div>
+        <pre>{JSON.stringify(table.getState(), null, 2)}</pre>
+      </div> */}
 
-      <div className="mt-8 mb-4 text-sm lg:mx-auto lg:max-w-6xl">
-        <nav className="flex items-center justify-between border-t border-gray-200">
-          <div className="-mt-px flex w-0 flex-1">
-            <button
-              type="button"
-              className="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-navy-500 hover:border-gray-300 hover:text-navy-700"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ArrowLeftIcon /> Previous
-            </button>
-          </div>
-          <div className="hidden md:-mt-px md:flex">
-            <span className="flex items-center gap-1 pt-4 text-navy-500">
-              <div>Page</div>
-              <strong>
-                {table.getState().pagination.pageIndex + 1} of{' '}
-                {table.getPageCount()}
-              </strong>
-            </span>
-          </div>
-          <div className="-mt-px flex w-0 flex-1 justify-end">
-            <button
-              type="button"
-              className="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-navy-500 hover:border-gray-300 hover:text-navy-700"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next <ArrowRightIcon />
-            </button>
-          </div>
-        </nav>
-      </div>
-      {/* <div>{table.getRowModel().rows.length} Rows</div>
-      <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
+      <Pager
+        pageNumber={table.getState().pagination.pageIndex + 1}
+        pageCount={table.getPageCount()}
+        pageSize={table.getState().pagination.pageSize}
+        goPage={(idx) =>
+          setPagination({
+            pageIndex: idx,
+            pageSize: table.getState().pagination.pageSize,
+          })
+        }
+      />
+
       <hr />
     </>
   );
