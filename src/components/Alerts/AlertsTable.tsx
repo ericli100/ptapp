@@ -14,17 +14,13 @@ import {
 } from '@tanstack/react-table';
 import { Alert, AlertSortByString } from '../../models/alert';
 
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-} from '../Icons/Icons';
+import { ChevronDownIcon, ChevronUpIcon } from '../Icons/Icons';
 import useAlertServices, {
   convertSortingStateToSortParams,
 } from '../../services/alertServices';
 import StatusCell from './StatusCell';
 import ResultCell from './ResultCell';
+import Pager from '../Pager/Pager';
 
 export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   const { getAlerts: getAlertsFromService } = useAlertServices();
@@ -75,7 +71,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
 
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 25,
+    pageSize: 0,
   });
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -114,8 +110,10 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     triggeredBy: 'Loading' | 'Paging' | 'Sorting' | 'Searching';
     filter: string;
   };
+
+  // TODO: EL - reset pagination rows
   const initialConfig: AlertsRetrievalConfig = {
-    paginationState: { pageIndex: 0, pageSize: 25 },
+    paginationState: { pageIndex: 0, pageSize: 5 },
     sortingState: [],
     triggeredBy: 'Loading',
     filter: '',
@@ -296,42 +294,21 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
           </tbody>
         </table>
       </div>
-
-      <div className="mt-8 mb-4 text-sm lg:mx-auto lg:max-w-6xl">
-        <nav className="flex items-center justify-between border-t border-gray-200">
-          <div className="-mt-px flex w-0 flex-1">
-            <button
-              type="button"
-              className="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-navy-500 hover:border-gray-300 hover:text-navy-700"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ArrowLeftIcon /> Previous
-            </button>
-          </div>
-          <div className="hidden md:-mt-px md:flex">
-            <span className="flex items-center gap-1 pt-4 text-navy-500">
-              <div>Page</div>
-              <strong>
-                {table.getState().pagination.pageIndex + 1} of{' '}
-                {table.getPageCount()}
-              </strong>
-            </span>
-          </div>
-          <div className="-mt-px flex w-0 flex-1 justify-end">
-            <button
-              type="button"
-              className="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-navy-500 hover:border-gray-300 hover:text-navy-700"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next <ArrowRightIcon />
-            </button>
-          </div>
-        </nav>
-      </div>
-      {/* <div>{table.getRowModel().rows.length} Rows</div>
-      <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre> */}
+      <Pager
+        pageIndex={table.getState().pagination.pageIndex + 1}
+        pageCount={table.getPageCount()}
+        goPrevious={table.previousPage}
+        canPrevious={table.getCanPreviousPage()}
+        goNext={table.nextPage}
+        canNext={table.getCanNextPage()}
+        pageSize={table.getState().pagination.pageSize}
+        goPage={(idx) =>
+          setPagination({
+            pageIndex: idx,
+            pageSize: table.getState().pagination.pageSize,
+          })
+        }
+      />
       <hr />
     </>
   );
