@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import IndexPageHeader from '../../components/Pages/IndexPageHeader';
 import AlertsTable from '../../components/Alerts/AlertsTable';
+import { STRING_NEVER_USED_FOR_SEARCH } from '../../services/constants';
 
 import TabsFilter from '../../components/FilterableTable/TabsFilter';
 import SearchFilter from '../../components/Search/SearchFilter';
@@ -8,7 +9,7 @@ import AddFiltersModal from '../../components/FilterableTable/AddFiltersModal';
 import AlertTypesDropDown from '../../components/FilterableTable/AlertTypesDropDown';
 
 export default function AlertsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(STRING_NEVER_USED_FOR_SEARCH);
   const resetSearchTerm = useCallback(() => {
     setSearchTerm('');
   }, []);
