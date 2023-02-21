@@ -13,7 +13,7 @@ import {
   createColumnHelper,
 } from '@tanstack/react-table';
 import { STRING_NEVER_USED_FOR_SEARCH } from '../../services/constants';
-import { Alert, AlertSortByString } from '../../models/alert';
+import { Alert, AlertsInfo, AlertSortByString } from '../../models/alert';
 
 import { ChevronDownIcon, ChevronUpIcon } from '../Icons/Icons';
 import useAlertServices, {
@@ -28,6 +28,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   const { getAlerts: getAlertsFromService } = useAlertServices();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [pageCount, setPageCount] = useState(-1);
+  const [total, setTotal] = useState(-1);
   const columnHelper = createColumnHelper<Alert>();
   const columns = useMemo<ColumnDef<Alert, any>[]>(
     () => [
@@ -201,10 +202,15 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
       );
     }
 
-    async function loadPagedAlerts() {
-      const alertsInfo = await loadAlerts();
+    function updateAlertsPageCountTotal(alertsInfo: AlertsInfo) {
       setAlerts(alertsInfo.alerts);
       setPageCount(alertsInfo.pageCount);
+      setTotal(alertsInfo.total);
+    }
+
+    async function loadPagedAlerts() {
+      const alertsInfo = await loadAlerts();
+      updateAlertsPageCountTotal(alertsInfo);
       setTablePagination({
         pageIndex: alertsInfo.page,
         pageSize: alertsInfo.size,
@@ -213,8 +219,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
 
     async function loadSortedAlerts() {
       const alertsInfo = await loadAlerts();
-      setAlerts(alertsInfo.alerts);
-      setPageCount(alertsInfo.pageCount);
+      updateAlertsPageCountTotal(alertsInfo);
       setTablePagination((p) => ({
         pageIndex: 0,
         pageSize: p.pageSize,
@@ -223,8 +228,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
 
     async function loadSearchedAlerts() {
       const alertsInfo = await loadAlerts(true);
-      setAlerts(alertsInfo.alerts);
-      setPageCount(alertsInfo.pageCount);
+      updateAlertsPageCountTotal(alertsInfo);
       setTablePagination((p) => ({
         pageIndex: 0,
         pageSize: p.pageSize,
@@ -316,6 +320,10 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
         pageNumber={table.getState().pagination.pageIndex + 1}
         pageCount={table.getPageCount()}
         pageSize={table.getState().pagination.pageSize}
+        total={total}
+        rowCount={alerts.length}
+        canPreviousPage={table.getCanPreviousPage()}
+        canNextPage={table.getCanNextPage()}
         goPage={(idx) =>
           setPagination({
             pageIndex: idx,
