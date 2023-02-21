@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import {
   PaginationState,
@@ -12,6 +12,7 @@ import {
   flexRender,
   createColumnHelper,
 } from '@tanstack/react-table';
+import { STRING_NEVER_USED_FOR_SEARCH } from '../../services/constants';
 import { Alert, AlertSortByString } from '../../models/alert';
 
 import { ChevronDownIcon, ChevronUpIcon } from '../Icons/Icons';
@@ -31,7 +32,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   const columns = useMemo<ColumnDef<Alert, any>[]>(
     () => [
       columnHelper.accessor('reviewStatus', {
-        header: 'Status',
+        header: 'Review Status',
         cell: (info) => <StatusCell status={info.getValue()} />,
       }),
       columnHelper.accessor('name', {
@@ -39,13 +40,13 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
         cell: (info) => <NameCell name={info.getValue()} />,
       }),
       {
-        header: 'ID Number',
+        header: 'ID',
         accessorKey: 'id',
         cell: (info) => info.getValue(),
       },
 
       {
-        header: 'Type',
+        header: 'Alert Type',
         accessorKey: 'alertType',
         cell: (info) => info.getValue(),
       },
@@ -59,7 +60,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
         cell: (info) => <ResultCell result={info.getValue()} />,
       }),
       {
-        header: 'Created',
+        header: 'Creation Date',
         accessorKey: 'creationDate',
         cell: (info) => format(info.row.original.creationDate, 'MM/dd/yyyy'),
       },
@@ -83,7 +84,9 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
   });
 
   // sorting
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: '-1', desc: false },
+  ]);
 
   // configuration to retrieve data.
   type AlertsRetrievalConfig = {
@@ -113,7 +116,7 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
       sorting,
     },
     onSortingChange: setSorting,
-    onPaginationChange: setPagination,
+    // onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     // getPaginationRowModel: getPaginationRowModel(),
@@ -122,11 +125,8 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     debugTable: false,
   });
 
-  const paginationInitialLoad = useRef(true);
-  // if paging has changed
   useEffect(() => {
-    if (paginationInitialLoad.current) {
-      paginationInitialLoad.current = false;
+    if (pageIndex === -1 || pageSize === -1) {
       return;
     }
     setAlertsRetrievalConfig((config) => {
@@ -138,11 +138,8 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     });
   }, [pageIndex, pageSize]);
 
-  const sortingInitialLoad = useRef(true);
-  // if sorting has changed
   useEffect(() => {
-    if (sortingInitialLoad.current) {
-      sortingInitialLoad.current = false;
+    if (sorting[0] && sorting[0].id === '-1') {
       return;
     }
     setAlertsRetrievalConfig((config) => {
@@ -158,11 +155,8 @@ export default function AlertsTable({ searchTerm }: { searchTerm: string }) {
     });
   }, [sorting]);
 
-  const SearchTermInitialLoad = useRef(true);
-  // if searchTerm has changed
   useEffect(() => {
-    if (SearchTermInitialLoad.current) {
-      SearchTermInitialLoad.current = false;
+    if (searchTerm === STRING_NEVER_USED_FOR_SEARCH) {
       return;
     }
     setAlertsRetrievalConfig((config) => {

@@ -15,7 +15,7 @@ const Router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <AuthenticationGuard component={AlertsPage} />,
+        element: <AuthenticationGuard component={DashboardPage} />,
         errorElement: <ErrorPage />,
       },
       {

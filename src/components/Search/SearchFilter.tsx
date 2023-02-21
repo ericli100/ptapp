@@ -1,5 +1,6 @@
 import { DebounceInput } from 'react-debounce-input';
 import { MagnifyingGlassIcon, XmarkIcon } from '../Icons/Icons';
+import { STRING_NEVER_USED_FOR_SEARCH } from '../../services/constants';
 
 type Props = {
   searchTerm: string;
@@ -23,7 +24,9 @@ export default function SearchFilter({
           <DebounceInput
             minLength={3}
             debounceTimeout={300}
-            value={searchTerm}
+            value={
+              searchTerm === STRING_NEVER_USED_FOR_SEARCH ? '' : searchTerm
+            }
             onChange={(evt) => setSearchTerm(evt.target.value)}
             type="text"
             name="search"
